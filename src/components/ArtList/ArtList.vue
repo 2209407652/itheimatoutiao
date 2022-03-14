@@ -15,6 +15,7 @@
           v-for="item in artlist"
           :key="item.art_id"
           :article="item"
+          @remove-article="removeArticle"
         ></art-item> </van-list
     ></van-pull-refresh>
   </div>
@@ -53,16 +54,16 @@ export default {
       const { data: res } = await getArtListAPI(this.channelId, this.timestamp);
       if (res.message === "OK") {
         this.timestamp = res.data.pre_timestamp;
-        if(ifRefresh) {
-            // 下拉刷新，新数据在上，旧数据在下
-            this.artlist = [...res.data.results, ...this.artlist]
-            // 重置 refreshing
-            this.refreshing = false
+        if (ifRefresh) {
+          // 下拉刷新，新数据在上，旧数据在下
+          this.artlist = [...res.data.results, ...this.artlist];
+          // 重置 refreshing
+          this.refreshing = false;
         } else {
-            // 上拉加载，旧数据在上，新数据在下
-            this.artlist = [...this.artlist, ...res.data.results]
-            // 重置 loading
-            this.loading = false
+          // 上拉加载，旧数据在上，新数据在下
+          this.artlist = [...this.artlist, ...res.data.results];
+          // 重置 loading
+          this.loading = false;
         }
         // 判断所有数据是否加载完毕
         if (res.data.pre_timestamp === null) {
@@ -76,7 +77,20 @@ export default {
     },
     // 下拉刷新
     onRefresh() {
-      this.initArtList(true)
+      this.initArtList(true);
+    },
+    // 从文章列表中移除指定 id 的文章
+    removeArticle(id) {
+      // 1. 炸楼操作
+      this.artlist = this.artlist.filter(
+        (item) => item.art_id.toString() !== id
+      );
+
+      // 2. 判断剩余数据的文章数量是否小于 10
+      if (this.artlist.length < 10) {
+        // 主动请求下一页的数据
+        this.initArtList();
+      }
     },
   },
   created() {
