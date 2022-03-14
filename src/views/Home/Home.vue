@@ -21,8 +21,12 @@
       offset-top="1.22666667rem"
       color="#007bff"
     >
-     <!-- 循环渲染用户的频道 -->
-      <van-tab v-for="item in userChannel" :key="item.id" :title="item.name">{{ item.name }}</van-tab>
+      <!-- 循环渲染用户的频道 -->
+      <van-tab v-for="item in userChannel" :key="item.id" :title="item.name">
+        <!-- 每个用户频道下渲染出对应的 文章列表组件 -->
+        <!-- 注意：Vue 官方建议在绑定 props 时，把“小驼峰”的属性名，改造成“短横线”的形式使用 -->
+        <art-list :channel-id="item.id"></art-list>
+      </van-tab>
     </van-tabs>
     <!-- 频道管理的小图标 -->
     <van-icon name="plus" size="16" class="plus" />
@@ -30,28 +34,32 @@
 </template>
 
 <script>
-import { getUserChannelAPI } from '@/api/homeAPI'
+import { getUserChannelAPI } from "@/api/homeAPI";
+import ArtList from "@/components/ArtList/ArtList.vue";
 export default {
   name: "Home",
   data() {
     return {
       // 标签页激活项索引
       active: 0,
-      userChannel: []
+      userChannel: [],
     };
   },
   created() {
-      // 获取用户标签数据
-      this.initUserChannel()
+    // 获取用户标签数据
+    this.initUserChannel();
   },
   methods: {
-      async initUserChannel() {
-          const { data: res } = await getUserChannelAPI()
-          if(res.message === "OK") {
-              this.userChannel = res.data.channels
-          }
+    async initUserChannel() {
+      const { data: res } = await getUserChannelAPI();
+      if (res.message === "OK") {
+        this.userChannel = res.data.channels;
       }
-  }
+    },
+  },
+  components: {
+    ArtList,
+  },
 };
 </script>
 

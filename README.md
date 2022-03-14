@@ -40,3 +40,15 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 **基于主分支，新键子分支**
 `git checkout -b 子分支名称`
+
+
+### Home 主页文章列表
+**Home组件**
+导航 -- 根据用户来决定导航信息
+van-tab 组件下用来展示文章列表 将导航信息 id 传给 ArtList
+ArtList 根据传递过来的 id 请求文章信息列表
+通过遍历循环把文章信息列表每一项给 ArtItem 然后 ArtItem 渲染数据
+
+**时间处理模块 - dayjs**
+`npm install dayjs -S`
+可以计算相对时间
