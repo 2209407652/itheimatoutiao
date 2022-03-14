@@ -68,8 +68,6 @@ export default {
     // 登陆回调函数
     async onLogin() {
       const { data: res } = await loginAPI(this.form)
-      console.log(res);
-              console.log(res.message);
       if(res.message === 'OK') {
         // 保存 token
         this.updateTokenInfo(res.data)
