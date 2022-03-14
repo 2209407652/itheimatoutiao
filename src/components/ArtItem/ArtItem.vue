@@ -33,7 +33,8 @@
             &nbsp;&nbsp; 发布日期:{{ article.pubdate | dateFormat }}</span
           >
           <!-- 关闭按钮 -->
-          <van-icon name="cross" />
+          <!-- 通过 .stop 事件修饰符，阻止点击事件的冒泡 -->
+          <van-icon name="cross" @click.stop="show = true" />
         </div>
       </template>
     </van-cell>
@@ -69,9 +70,6 @@
         />
       </div>
     </van-action-sheet>
-    <!-- 关闭按钮 -->
-    <!-- 通过 .stop 事件修饰符，阻止点击事件的冒泡 -->
-    <van-icon name="cross" @click.stop="show = true" />
   </div>
 </template>
 
@@ -109,9 +107,9 @@ export default {
       if (name === "不感兴趣") {
         // 不感兴趣删除文章
         const { data: res } = await dislikeArticleAPI(this.artId);
-        if(res.message === "OK") {
+        if (res.message === "OK") {
           // 炸楼操作
-          this.$emit('remove-article', this.artId)
+          this.$emit("remove-article", this.artId);
         }
         this.show = false;
       } else if (name === "拉黑作者") {
@@ -123,12 +121,12 @@ export default {
     },
     // 二级举报类型
     async reportArticle(type) {
-      const { data: res } = await reportArticleAPI(this.artId, type)
-      if(res.message === "OK") {
+      const { data: res } = await reportArticleAPI(this.artId, type);
+      if (res.message === "OK") {
         // 炸楼操作
-        this.$emit('remove-article', this.artId)
+        this.$emit("remove-article", this.artId);
       }
-    }
+    },
   },
   computed: {
     // 计算点击文章的 id

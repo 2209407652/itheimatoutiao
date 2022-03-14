@@ -41,6 +41,12 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 **基于主分支，新键子分支**
 `git checkout -b 子分支名称`
 
+**查看本地分支**
+`git branch`
+**查看远程分支**
+`git branch -a`
+**切回主分支**
+`git checkout master`
 
 ### Home 主页文章列表
 **Home组件**
