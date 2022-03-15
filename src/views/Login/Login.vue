@@ -29,9 +29,9 @@
 </template>
 
 <script>
-import { loginAPI } from '@/api/userAPI'
+import { loginAPI } from "@/api/userAPI";
 // 按需导入辅助函数
-import { mapMutations } from 'vuex'
+import { mapMutations } from "vuex";
 export default {
   name: "Login",
   data() {
@@ -64,15 +64,16 @@ export default {
   },
   methods: {
     // 映射 mutations 的方法
-    ...mapMutations(['updateTokenInfo']),
+    ...mapMutations(["updateTokenInfo"]),
     // 登陆回调函数
     async onLogin() {
-      const { data: res } = await loginAPI(this.form)
-      if(res.message === 'OK') {
+      const { data: res } = await loginAPI(this.form);
+      if (res.message === "OK") {
         // 保存 token
-        this.updateTokenInfo(res.data)
-        // 路由跳转到主页
-        this.$router.push('/')
+        this.updateTokenInfo(res.data);
+        // 路由跳转到主页还是用户上次访问的路由界面
+        const navPath = this.$route.query.pre || "/";
+        this.$router.replace(navPath);
       }
     },
   },

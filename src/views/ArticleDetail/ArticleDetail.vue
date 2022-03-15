@@ -92,6 +92,7 @@ import {
   addLikeAPI,
   delLikeAPI,
 } from "@/api/articleAPI.js";
+import { mapState } from 'vuex'
 export default {
   name: "ArticleDetail",
   // 这个 props 接受的是路由 /article/:id 的数据
@@ -112,6 +113,12 @@ export default {
     },
     // 关注文章作者
     async setFollow() {
+      // 先判断用户是否登陆
+      if(!this.tokenInfo.token) {
+        this.$toast.success("请先登陆后再操作!");
+        this.$router.push('/login')
+        return
+      }
       const { data: res } = await followUserAPI(this.article.aut_id.toString());
       if (res.message === "OK") {
         // 提示用户成功
@@ -153,6 +160,9 @@ export default {
         this.article.attitude = -1;
       }
     },
+  },
+  computed: {
+    ...mapState(['tokenInfo'])
   },
   created() {
     this.initArticle();
