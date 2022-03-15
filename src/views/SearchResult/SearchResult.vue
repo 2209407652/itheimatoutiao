@@ -31,6 +31,8 @@ import { getSearchResultAPI } from "@/api/searchAPI";
 import ArtItem from "@/components/ArtItem/ArtItem.vue";
 export default {
   name: "SearchResult",
+  // 路由传递的 kw 关键字
+  props: ['kw'],
   data() {
     return {
       // 页码值
@@ -47,7 +49,7 @@ export default {
     async initSearchList() {
       // 调用 API 接口  --  这里路由传值应该用 this.$route.params.kw
       const { data: res } = await getSearchResultAPI(
-        this.$route.params.kw,
+        this.kw,
         this.page
       );
       if (res.message === "OK") {
