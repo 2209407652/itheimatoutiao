@@ -32,7 +32,7 @@ import ArtItem from "@/components/ArtItem/ArtItem.vue";
 export default {
   name: "SearchResult",
   // 路由传递的 kw 关键字
-  props: ['kw'],
+  props: ["kw"],
   data() {
     return {
       // 页码值
@@ -48,10 +48,7 @@ export default {
     // 获取搜索结果
     async initSearchList() {
       // 调用 API 接口  --  这里路由传值应该用 this.$route.params.kw
-      const { data: res } = await getSearchResultAPI(
-        this.kw,
-        this.page
-      );
+      const { data: res } = await getSearchResultAPI(this.kw, this.page);
       if (res.message === "OK") {
         // 1. 拼接数据：“旧数据”在前，“新数据”在后
         this.searchList = [...this.searchList, ...res.data.results];
@@ -72,6 +69,18 @@ export default {
   },
   created() {
     this.initSearchList();
+  },
+  watch: {
+    kw() {
+      // 1. 重置关键数据
+      this.page = 1;
+      this.searchList = [];
+      this.loading = false;
+      this.finished = false;
+
+      // 2. 请求数据
+      this.initSearchList();
+    },
   },
   components: {
     ArtItem,

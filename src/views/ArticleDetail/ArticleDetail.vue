@@ -83,7 +83,9 @@
   </div>
 </template>
 <script>
-import ArtCmt from '@/components/ArtCmt/ArtCmt.vue'
+// 导入 highlight.js 模块
+import hljs from "highlight.js";
+import ArtCmt from "@/components/ArtCmt/ArtCmt.vue";
 // 按需导入 API 接口
 import {
   getArticleDetailAPI,
@@ -92,7 +94,7 @@ import {
   addLikeAPI,
   delLikeAPI,
 } from "@/api/articleAPI.js";
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
 export default {
   name: "ArticleDetail",
   // 这个 props 接受的是路由 /article/:id 的数据
@@ -114,10 +116,10 @@ export default {
     // 关注文章作者
     async setFollow() {
       // 先判断用户是否登陆
-      if(!this.tokenInfo.token) {
+      if (!this.tokenInfo.token) {
         this.$toast.success("请先登陆后再操作!");
-        this.$router.push('/login')
-        return
+        this.$router.push("/login");
+        return;
       }
       const { data: res } = await followUserAPI(this.article.aut_id.toString());
       if (res.message === "OK") {
@@ -162,14 +164,36 @@ export default {
     },
   },
   computed: {
-    ...mapState(['tokenInfo'])
+    ...mapState(["tokenInfo"]),
   },
   created() {
     this.initArticle();
   },
+  watch: {
+    id() {
+      // 只要 id 值发生了变化，就清空旧的文章信息
+      this.article = null;
+      // 并重新获取文章的详情数据
+      this.initArticle();
+    },
+  },
   components: {
-    ArtCmt
-  }
+    ArtCmt,
+  },
+  // 1. 当组件的 DOM 更新完毕之后
+  updated() {
+    // 2. 判断是否有文章的内容
+    if (this.article) {
+      // 3. 对文章的内容进行高亮处理
+      hljs.highlightAll();
+    }
+  },
+  beforeRouteLeave(to, from, next) {
+    from.meta.top = window.scrollY;
+    setTimeout(() => {
+      next();
+    }, 0);
+  },
 };
 </script>
 <style lang="less" scoped>

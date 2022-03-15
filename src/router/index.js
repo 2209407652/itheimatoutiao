@@ -28,10 +28,13 @@ const routes = [
     children: [
       {
         path: '/home',
-        component: () => import('@/views/Home/Home.vue')
+        name: 'name',
+        component: () => import('@/views/Home/Home.vue'),
+        meta: { isRecord: true, top: 0 }
       },
       {
         path: '/user',
+        name: 'user',
         component: () => import('@/views/User/User.vue')
       }
     ]
@@ -54,7 +57,8 @@ const routes = [
     path: '/article/:id',
     name: 'art-detail',
     component: () => import('@/views/ArticleDetail/ArticleDetail.vue'),
-    props: true
+    props: true,
+    meta: { isRecord: true, top: 0 } 
   },
   // 编辑用户资料页
   {
@@ -95,6 +99,17 @@ router.beforeEach((to, from, next) => {
   } else {
     // 访问的是没有权限的页面
     next()
+  }
+})
+
+// 全局后置钩子
+router.afterEach((to, from) => {
+  // 如果当前的路由的元信息中，isRecord 的值为 true
+  if (to.meta.isRecord) {
+    setTimeout(() => {
+      // 则把元信息中的 top 值设为滚动条纵向滚动的位置
+      window.scrollTo(0, to.meta.top)
+    }, 0)
   }
 })
 

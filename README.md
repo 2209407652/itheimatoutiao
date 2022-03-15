@@ -104,3 +104,73 @@ ArtList 根据传递过来的 id 请求文章信息列表
 给上传头像绑定 ref="fileRef"
 然后给头像绑定点击事件，通过触发$refs.fileRef.click() 来实现功能
 
+### 项目优化
+```html
+<template>
+  <div>
+    <!-- 路由占位符 -->
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
+  </div>
+</template>
+```
+为了防止文章详情页面也被缓存了，所以用 watch 来监听 id ，只要 id 变了就清空文章信息，并重新请求
+为了防止搜索结果页也缓存了，需要监听 kw 关键字来动态请求结果
+**防止 User 页面被缓存不刷新**
+
+```html
+    <!-- Main组件 keep-alive -->
+    <!-- 路由占位符 -->
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
+    <van-tabbar route>
+      <van-tabbar-item icon="home-o" to="/">首页</van-tabbar-item>
+      <van-tabbar-item icon="user-o" to="/user">我的</van-tabbar-item>
+    </van-tabbar>
+```
+keep-alive 之后会有一个activated 和 deactivated生命周期函数
+```js
+// User 组件
+/*   created() {
+     this.initUserInfo();
+    }, */
+  // 该生命周期只有被 keep-alive 之后才有
+  activated() {
+    // 只要组件被激活了，就重新初始化用户的信息
+    this.initUserInfo();
+  },
+```
+
+**记录首页滚动位置**
+声明 beforeRouteLeave 这个组件内的守卫，用来记录当前组件在纵向上滚动的距离
+```js 
+// 在路由中声明如下
+{
+  path: '',
+  component: Home,
+  name: 'home',
+  meta: { isRecord: true, top: 0 }
+}
+// 在 home 组件中声明 beforeRouteLeave 组件守卫
+  // 导航离开该组件的对应路由时调用
+  // 可以访问组件实例 `this`
+  beforeRouteLeave(to, from, next) {
+    from.meta.top = window.scrollY;
+    next();
+  },
+// 在路由中声明全局后置钩子
+// 全局后置钩子
+router.afterEach((to, from) => {
+  // 如果当前的路由的元信息中，isRecord 的值为 true
+  if (to.meta.isRecord) {
+    setTimeout(() => {
+      // 则把元信息中的 top 值设为滚动条纵向滚动的位置
+      window.scrollTo(0, to.meta.top)
+    }, 0)
+  }
+})
+```
+**highlight.js**
+可实现对代码区域高亮显示

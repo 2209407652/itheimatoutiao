@@ -8,7 +8,12 @@
       /></template>
       <!-- 右插槽 -->
       <template #right>
-        <van-icon name="search" color="white" size="18" @click="$router.push('/search')" />
+        <van-icon
+          name="search"
+          color="white"
+          size="18"
+          @click="$router.push('/search')"
+        />
       </template>
     </van-nav-bar>
 
@@ -29,7 +34,11 @@
     <!-- 频道管理的小图标 -->
     <van-icon name="plus" size="16" class="plus" @click="show = true" />
     <!-- 频道管理的弹出层 -->
-    <van-popup v-model="show" :close-on-click-overlay="false" @closed="isDel = false">
+    <van-popup
+      v-model="show"
+      :close-on-click-overlay="false"
+      @closed="isDel = false"
+    >
       <div class="popup-container">
         <!-- 弹出层的头部区域 -->
         <van-nav-bar title="频道管理">
@@ -60,7 +69,11 @@
             </div>
             <!-- 我的频道列表 -->
             <van-row type="flex">
-              <van-col span="6" v-for="(item, index) in userChannel" :key="item.id">
+              <van-col
+                span="6"
+                v-for="(item, index) in userChannel"
+                :key="item.id"
+              >
                 <!-- 用户的频道 Item 项 -->
                 <div
                   class="channel-item van-hairline--surround"
@@ -191,7 +204,7 @@ export default {
       if (this.isDel) {
         // 如果是删除状态
         // 推荐标签不能删除，标签最少两个
-        if(channel.name === "标签" || this.userChannel.length < 3) return 
+        if (channel.name === "标签" || this.userChannel.length < 3) return;
         this.userChannel = this.userChannel.filter(
           (item) => item.id !== channel.id
         );
@@ -200,8 +213,8 @@ export default {
       } else {
         // 不是删除状态，跳转
         // 修改导航栏索引值
-        this.active = index
-        this.show = false
+        this.active = index;
+        this.show = false;
       }
     },
   },
@@ -218,6 +231,12 @@ export default {
   },
   components: {
     ArtList,
+  },
+  // 导航离开该组件的对应路由时调用
+  // 可以访问组件实例 `this`
+  beforeRouteLeave(to, from, next) {
+    from.meta.top = window.scrollY;
+    next();
   },
 };
 </script>

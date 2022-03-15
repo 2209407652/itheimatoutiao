@@ -34,8 +34,18 @@
 
     <!-- 操作面板 -->
     <van-cell-group class="action-card">
-      <van-cell icon="edit" title="编辑资料" is-link @click="$router.push({name: 'user-edit'})" />
-      <van-cell icon="chat-o" title="小思同学" is-link @click="$router.push({name: 'chat'})" />
+      <van-cell
+        icon="edit"
+        title="编辑资料"
+        is-link
+        @click="$router.push({ name: 'user-edit' })"
+      />
+      <van-cell
+        icon="chat-o"
+        title="小思同学"
+        is-link
+        @click="$router.push({ name: 'chat' })"
+      />
       <van-cell icon="warning-o" title="退出登录" is-link @click="logout" />
     </van-cell-group>
   </div>
@@ -65,15 +75,20 @@ export default {
       if (confirmResult === "cancel") return;
       // 实现退出功能
       // 清空 token 和 userInfo
-      this.cleanState()
+      this.cleanState();
       // 跳转到登陆页
-      this.$router.push('/login')
+      this.$router.push("/login");
     },
   },
   computed: {
     ...mapState(["userInfo"]),
   },
-  created() {
+/*   created() {
+     this.initUserInfo();
+  }, */
+  // 该生命周期只有被 keep-alive 之后才有
+  activated() {
+    // 只要组件被激活了，就重新初始化用户的信息
     this.initUserInfo();
   },
 };
