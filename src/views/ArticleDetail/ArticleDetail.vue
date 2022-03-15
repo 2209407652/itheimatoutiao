@@ -76,9 +76,14 @@
         >
       </div>
     </div>
+
+    <!-- 文章评论 -->
+    <!-- 文章的评论组件（ art-id 是短横线命名法 ） -->
+    <art-cmt :art-id="id"></art-cmt>
   </div>
 </template>
 <script>
+import ArtCmt from '@/components/ArtCmt/ArtCmt.vue'
 // 按需导入 API 接口
 import {
   getArticleDetailAPI,
@@ -152,6 +157,9 @@ export default {
   created() {
     this.initArticle();
   },
+  components: {
+    ArtCmt
+  }
 };
 </script>
 <style lang="less" scoped>

@@ -77,3 +77,23 @@ ArtList 根据传递过来的 id 请求文章信息列表
         })
       }) 
 ```
+
+### 文章详情和评论
+**平滑滚动到评论列表区域**
+`npm install popmotion@9.3.5 -S`
+```js
+    // 滚动到评论的列表区域
+    scrollToCmtList() {
+      // 1. 当前滚动条的位置
+      const now = window.scrollY;
+      // 2. 目标位置（文章信息区域的高度）
+      const dist = document.querySelector(".article-container").offsetHeight;
+
+      // 3. 实现滚动动画
+      animate({
+        from: now, // 当前的位置
+        to: dist, // 目标位置
+        onUpdate: (latest) => window.scrollTo(0, latest),
+      });
+    },
+```
