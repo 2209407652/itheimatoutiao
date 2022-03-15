@@ -23,6 +23,17 @@ const routes = [
         component: () => import('@/views/User/User.vue')
       }
     ]
+  },
+  {
+    path: '/search',
+    name: 'search',
+    component: () => import('@/views/Search/Search.vue')
+  },
+  {
+    path: '/search/:kw',
+    name: 'search-result',
+    component: () => import('@/views/SearchResult/SearchResult.vue'),
+    props: true
   }
 ]
 

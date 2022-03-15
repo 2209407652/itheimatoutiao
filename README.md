@@ -58,3 +58,22 @@ ArtList 根据传递过来的 id 请求文章信息列表
 **时间处理模块 - dayjs**
 `npm install dayjs -S`
 可以计算相对时间
+
+**防抖和节流**
+节流：单位时间内，重复的操作只会触发 1 次
+防抖：频繁触发某个操作时，仅触发最后 1 次，回城多次时只会回一次计时
+
+### Search 搜索
+**搜索关键词高亮处理**
+1.通过 replace 方法对搜索结果的内容进行替换，从而关键词高亮
+2.通过 RegExp(this.kw, 'ig') 动态创建正则表达式
+``` js
+        // 根据用户关键词动态创建正则表达式
+      const reg = RegExp(this.kw, 'ig')
+      // 循环数据，调用字符串的 replace 方法进行关键字的高亮处理
+      arr.forEach((item, index) => {
+        arr[index] = item.replace(reg, val => {
+          return `<span style="color: red; font-weight: bold;">${val}</span>`
+        })
+      }) 
+```

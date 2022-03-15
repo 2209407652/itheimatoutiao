@@ -34,7 +34,7 @@
           >
           <!-- 关闭按钮 -->
           <!-- 通过 .stop 事件修饰符，阻止点击事件的冒泡 -->
-          <van-icon name="cross" @click.stop="show = true" />
+          <van-icon name="cross" @click.stop="show = true" v-if="closable" />
         </div>
       </template>
     </van-cell>
@@ -83,6 +83,12 @@ export default {
     article: {
       typeof: Object,
       required: true,
+    },
+    // 是否展示关闭按钮
+    closable: {
+      type: Boolean,
+      // 默认值为 true，表示展示关闭按钮
+      default: true,
     },
   },
   data() {
